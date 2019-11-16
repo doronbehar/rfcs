@@ -112,7 +112,7 @@ All the above issues should be resolved by this:
 4. We can easily gather statistics. In the long run, we might even implement
    some sort of automated triage where we regularly ping `needs:work` PRs and
    close them after the authors went unresponsive for a while. Or we could
-   tag them as `needs:takeover`. But this is out of scope.
+   tag them as `needs:takeover`. This is out of scope for this RFC.
 
 ## Illustration
 
