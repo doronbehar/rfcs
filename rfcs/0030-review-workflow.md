@@ -58,6 +58,13 @@ This workflow is not currently possible due to GitHub's restrictions. Namely
 only people with commit access can set tags on a PR. This can be resolved
 through tooling. Work on this is [in progress](https://github.com/NixOS/ofborg/pull/216).
 
+Other options, might include running already implemented bots / GitHub Apps
+such as:
+
+* https://github.com/facelessuser/label-bot
+* https://github.com/marketplace/trafico-pull-request-labeler
+* https://github.com/marketplace/actions/label-approved-pull-requests
+
 The tooling should then initialize the PR status on new PRs. In general this
 is going to be `needs:review`. One exception of this are PRs that are work in
 progress (indicated by a `WIP` tag in the title). Those should start at
@@ -66,6 +73,25 @@ own state (`needs:opinions`?).
 
 To reduce friction for new contributors, the tooling could later be expaned
 to explain this process to first time contributors.
+
+The tooling should enable reviewers change the states of a PR with comments
+such as:
+
+> @GrahamcOfBorg status needs:work
+
+Or:
+
+> @GrahamcOfBorg status needs:merge
+
+A PR's status should be changed automatically according to the following
+events table:
+
+| event | current status | next status |
+| ----- | -------------- | ----------- |
+| A PR is created |  | needs:review |
+| A reviwer writes a review / general comment without context | needs:review | needs:work |
+| A PR author / collaborators push commits | needs:work | needs:review |
+| A reviwer approves a PR | needs:review | needs:merge |
 
 ## Advantages
 
@@ -88,22 +114,31 @@ All the above issues should be resolved by this:
    close them after the authors went unresponsive for a while. Or we could
    tag them as `needs:takeover`. But this is out of scope.
 
+## Illustration
 
-An example PR might go like this. `contributor` creates the PR, `reviewer1`
-reviews without commit access, `reviewer2` reviews with commit access.
+An example PR might go like this:
+
+1. `contributor` creates a PR
 
 > contributor: hello: 42.0 -> 43.0 [PR text]
 
 [the bot automatically sets the new PR to `needs:review`]
 
+`reviewer1` reviews without commit access
+
 > reviewer1: Looks good to me. Just one little nitpick: Please add a waving emoji to the name.
-> @GrahamcOfBorg status needs:work
+
+[the bot automatically sets the new PR to `needs:work`]
 
 > contributor: Good point, more emojis are always good. Done.
-> @GrahamcOfBorg status needs:review
+
+[the bot automatically sets the new PR to `needs:review`]
 
 > reviewer1: Thanks! I think this is ready for merge.
-> @GrahamcOfBorg status needs:merge
+
+[reviewer1 approves this pull request]
+
+[the bot automatically sets the new PR to `needs:merge`]
 
 > reviewer2: LGTM
 > @GrahamcOfBorg build-and-merge
@@ -135,7 +170,7 @@ reviews without commit access, `reviewer2` reviews with commit access.
 
 - List the exact states. We should probably start simple and evolve from there.
 
-- Finish the tooling.
+- Finish the tooling / decide on what existing toolings will be used for the purpose.
 
 - Write documentation. It should at least be explained in `CONTRIBUTING.md`,
   maybe a greeting bot explaining it to first time contributors would be even
