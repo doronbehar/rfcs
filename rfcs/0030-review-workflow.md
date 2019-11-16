@@ -1,9 +1,9 @@
 ---
 feature: review_workflow
 start-date: 2018-08-12
-author: Timo Kaufmann
-co-authors: (find a buddy later to help our with the RFC)
-related-issues: (will contain links to implementation PRs)
+author: Doron Behar
+co-authors: Timo Kaufmann
+related-issues: https://github.com/NixOS/ofborg/pull/216
 ---
 
 # Summary
